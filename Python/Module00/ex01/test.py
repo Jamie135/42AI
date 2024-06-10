@@ -1,3 +1,0 @@
-import exec
-
-exec.main()
