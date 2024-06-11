@@ -29,8 +29,6 @@ class Vector:
         res = 0
         # row
         if self.shape[0] == 1:
-            # zip() method merges passed lists into one
-            # by combining the values at the same index of both list in a tuple
             for a, b in zip(self.values[0], vect.values[0]):
                 res += a * b
         # column
