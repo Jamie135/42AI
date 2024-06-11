@@ -5,8 +5,8 @@ def main():
     if len(sys.argv) == 1:
         return
     else:
-        str = ''.join(sys.argv[1:])
-        res = str[::-1].swapcase()
+        joined = ''.join(sys.argv[1:])
+        res = joined[::-1].swapcase()
         print(res)
 
 

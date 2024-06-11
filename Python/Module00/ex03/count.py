@@ -12,7 +12,6 @@ def text_analyzer(text=None):
     if text is None:
         text = input("What is the text to analyze?\n")
 
-    # verifie si l'objet text est un str
     if not isinstance(text, str):
         print("Error: argument is not a string")
         return
