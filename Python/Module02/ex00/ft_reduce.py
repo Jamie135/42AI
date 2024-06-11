@@ -7,9 +7,4 @@ def ft_reduce(function_to_apply, iterable):
     A value, of same type of elements in the iterable parameter.
     None if the iterable can not be used by the function.
     """
-
-    # an iterable object has an __iter__ attribute
-    if not hasattr(iterable, '__iter__'):
-        raise TypeError("Passed object must be iterable")
-    for i in iterable:
-        yield function_to_apply(i)
+    
