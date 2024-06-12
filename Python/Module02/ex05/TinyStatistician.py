@@ -61,7 +61,7 @@ print(stat.median(x))
 # Expected result: 42.0
 
 print(stat.quartiles(x))
-# Expected result: [10.0, 59.0]
+# Expected result: [5.5, 179.5]
 
 print(stat.var(x))
 # Expected result: 12279.439999999999
