@@ -1,8 +1,8 @@
 class Account(object):
     ID_COUNT = 1
 
-    # kwargs est un dictionnaire qui contient les attributs additionnels 
-    # (paires cles-valeurs) qu'on pourrait vouloir ajouter à l'instance
+    # kwargs prend les keyword arguments (ex: value=50, corrupted=True)
+    # et les places dans un dictionnaire
     def __init__(self, name, **kwargs):
         self.__dict__.update(kwargs)
         self.id = self.ID_COUNT
