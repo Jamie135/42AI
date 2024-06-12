@@ -51,20 +51,20 @@ class TinyStatistician:
         return variance ** 0.5
     
 
-stat = TinyStatistician()
-x = [1, 42, 300, 10, 59]
+# stat = TinyStatistician()
+# x = [1, 42, 300, 10, 59]
 
-print(stat.mean(x))
-# Expected result: 82.4
+# print(stat.mean(x))
+# # Expected result: 82.4
 
-print(stat.median(x))
-# Expected result: 42.0
+# print(stat.median(x))
+# # Expected result: 42.0
 
-print(stat.quartiles(x))
-# Expected result: [5.5, 179.5]
+# print(stat.quartiles(x))
+# # Expected result: [5.5, 179.5]
 
-print(stat.var(x))
-# Expected result: 12279.439999999999
+# print(stat.var(x))
+# # Expected result: 12279.439999999999
 
-print(stat.std(x))
-# Expected result: 110.81263465868862
+# print(stat.std(x))
+# # Expected result: 110.81263465868862
