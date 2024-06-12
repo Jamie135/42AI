@@ -7,7 +7,13 @@ def ft_map(function_to_apply, iterable):
     An iterable.
     None if the iterable can not be used by the function.
     """
-    res = []
+    if not callable(function_to_apply):
+        raise TypeError("The function must be a callable")
+    if not hasattr(iterable, '__iter__'):
+        raise TypeError("The object must be an iterable")
     for i in iterable:
-        res.append(function_to_apply(i))
-    return res
+        yield function_to_apply(i)
+
+
+# x = [1, 2, 3, 4, 5]
+# print(list(ft_map(lambda dum: dum + 1, x)))  # Output: [2, 3, 4, 5, 6]
