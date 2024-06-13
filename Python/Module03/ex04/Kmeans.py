@@ -3,16 +3,17 @@ import pandas as pd
 
 
 class KmeansClustering:
-    def __init__(self, max_iterations=20, centroid_num=5):
-        self.centroid_num = centroid_num # number of centroids
-        self.max_iterations = max_iterations # number of max iterations to update the centroids
+    
+    def __init__(self, max_iter=20, ncentroid=5):
+        self.ncentroid = ncentroid # number of centroids
+        self.max_iter = max_iter # number of max iterations to update the centroids
         self.centroids = []  # values of the centroids
 
 
     def fit(self, X):
         """
         Run the K-means clustering algorithm.
-        For the location of the initial centroids, random pick centroid_nums from the dataset.
+        For the location of the initial centroids, random pick ncentroid from the dataset.
         Args:
         -----
         X: has to be an numpy.ndarray, a matrice of dimension m * n.
@@ -24,19 +25,19 @@ class KmeansClustering:
         This function should not raise any Exception.
         """
         # Step 1: Initialize centroids randomly from the dataset
-        idx = np.random.choice(X.shape[0], self.centroid_num, replace=False)
+        idx = np.random.choice(X.shape[0], self.ncentroid, replace=False)
         self.centroids = X[idx]
 
         for _ in range(self.max_iter):
             # Step 2: Assign points to the nearest centroid
-            clusters = [[] for _ in range(self.centroid_num)]
+            clusters = [[] for _ in range(self.ncentroid)]
             for point in X:
                 distances = np.linalg.norm(self.centroids - point, axis=1)
                 cluster_idx = np.argmin(distances)
                 clusters[cluster_idx].append(point)
 
             # Step 3: Update centroids to the mean of their assigned points
-            for i in range(self.centroid_num):
+            for i in range(self.ncentroid):
                 if clusters[i]:
                     self.centroids[i] = np.mean(clusters[i], axis=0)
         
@@ -90,5 +91,4 @@ if __name__ == "__main__":
         _, filepath, ncentroid, max_iter = sys.argv
         main(filepath, int(ncentroid), int(max_iter))
     else:
-        print("Usage: python Kmeans.py filepath='../ressources/solar_system_census.csv' ncentroid=4 max_iter=30")
-
+        print("Usage: python Kmeans.py filepath='../resources/solar_system_census.csv' ncentroid=4 max_iter=30")

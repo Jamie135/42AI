@@ -124,12 +124,10 @@ print(spb.crop(arr1, (3, 1), (1, 0)))
 arr2 = np.array("A B C D E F G H I".split() * 6).reshape(-1, 9)
 print(spb.thin(arr2, 3, 0))
 # Output:
-# array([['A', 'B', 'D', 'E', 'G', 'H', 'J', 'K'],
-#        ['A', 'B', 'D', 'E', 'G', 'H', 'J', 'K'],
-#        ['A', 'B', 'D', 'E', 'G', 'H', 'J', 'K'],
-#        ['A', 'B', 'D', 'E', 'G', 'H', 'J', 'K'],
-#        ['A', 'B', 'D', 'E', 'G', 'H', 'J', 'K'],
-#        ['A', 'B', 'D', 'E', 'G', 'H', 'J', 'K']], dtype='<U1')
+# array([['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I']
+#        ['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I']
+#        ['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I']
+#        ['A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I']] dtype='<U1')
 
 # Example for juxtapose
 arr3 = np.array([[1, 2, 3], [1, 2, 3], [1, 2, 3]])

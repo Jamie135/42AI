@@ -17,7 +17,10 @@ class ColorFilter:
         -------
         This function should not raise any Exception.
         """
-        return 255 - array
+        # Invert the colors using numpy's capabilities
+        inverted = 1 - array
+        inverted[..., 3:] = array[..., 3:]
+        return inverted.astype(array.dtype)  # Ensure output type matches input type
 
 
     def to_blue(self, array):
@@ -54,7 +57,10 @@ class ColorFilter:
         -------
         This function should not raise any Exception.
         """
-        return array * np.array([0, 1, 0])
+        green_array = array.copy()
+        green_array[:, :, 0] = 0
+        green_array[:, :, 2] = 0
+        return green_array
 
 
     def to_red(self, array):
@@ -71,8 +77,10 @@ class ColorFilter:
         -------
         This function should not raise any Exception.
         """
-        green_blue = self.to_green(array) + self.to_blue(array)
-        return array - green_blue
+        red_array = array.copy()
+        red_array[:, :, 1] = 0
+        red_array[:, :, 2] = 0
+        return red_array
 
 
     def to_celluloid(self, array):
@@ -94,9 +102,11 @@ class ColorFilter:
         -------
         This function should not raise any Exception.
         """
-        thresholds = np.linspace(0, 255, 5)
-        return np.digitize(array, thresholds) * (255 / 4)
-
+        array_copy = array.copy()
+        thresholds = np.linspace(array_copy.min(), array_copy.max(), num=5)
+        for i in range(len(thresholds) - 1):
+            array_copy[(array_copy >= thresholds[i]) & (array_copy <= thresholds[i + 1])] = thresholds[i]
+        return array_copy
 
     def to_grayscale(self, array, filter, **kwargs):
         """
@@ -118,17 +128,22 @@ class ColorFilter:
         This function should not raise any Exception.
         """
         if filter in ['m', 'mean']:
-            return np.mean(array, axis=-1)
+            gray_array = np.mean(array, axis=2, dtype=array.dtype)
         elif filter in ['w', 'weight']:
-            weights = kwargs.get('weights', [0.333, 0.333, 0.333])
-            weights = np.array(weights)
-            return np.dot(array, weights)
+            weights = kwargs.get('weights')
+            if weights is None or len(weights) != 3 or not np.isclose(sum(weights), 1.0):
+                return None
+            
+            # Apply weights to RGB channels
+            gray_array = np.dot(array[..., :3], weights)
+        else:
+            return None
+        
+        return gray_array.astype(array.dtype)
         
 
 imp = ImageProcessor()
 arr = imp.load("../resources/Elon.png")
-# Output :
-# Loading image of dimensions 200 x 200
 
 cf = ColorFilter()
 imp.display(cf.invert(arr))
