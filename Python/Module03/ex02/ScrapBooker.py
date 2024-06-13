@@ -52,9 +52,9 @@ class ScrapBooker:
         # for a one dimensional array, this returns those entries not returned by arr[obj]
         try:
             if axis == 0:
-                return np.delete(array, np.s_[n-1::n], axis=1)
-            elif axis == 1:
                 return np.delete(array, np.s_[n-1::n], axis=0)
+            elif axis == 1:
+                return np.delete(array, np.s_[n-1::n], axis=1)
         except:
             return None
 

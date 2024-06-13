@@ -33,7 +33,7 @@ class NumPyCreator:
 
 
     def random(self, shape, dtype=None):
-        # random.random(size=None) return random floats in the half-open interval [0.0, 1.0)
+        # random.random(size=None) return random floats in the half-open interval [0.0, 1.0(
         try:
             return np.random.random(shape).astype(dtype) if isinstance(shape, tuple) else None
         except:

@@ -17,7 +17,7 @@ class ColorFilter:
         -------
         This function should not raise any Exception.
         """
-        return 255 - array.copy()
+        return 255 - array
 
 
     def to_blue(self, array):
@@ -101,12 +101,12 @@ class ColorFilter:
     def to_grayscale(self, array, filter, **kwargs):
         """
         Applies a grayscale filter to the image received as a numpy array.
-        For filter = ’mean’/’m’: performs the mean of RBG channels.
-        For filter = ’weight’/’w’: performs a weighted mean of RBG channels.
+        For filter = 'mean'/'m': performs the mean of RBG channels.
+        For filter = 'weight'/'w': performs a weighted mean of RBG channels.
         Args:
         -----
         array: numpy.ndarray corresponding to the image.
-        filter: string with accepted values in [’m’,’mean’,’w’,’weight’]
+        filter: string with accepted values in ['m','mean','w','weight']
         weights: [kwargs] list of 3 floats where the sum equals to 1,
         corresponding to the weights of each RBG channels.
         Return:
@@ -126,7 +126,7 @@ class ColorFilter:
         
 
 imp = ImageProcessor()
-arr = imp.load("42AI.png")
+arr = imp.load("../resources/Elon.png")
 # Output :
 # Loading image of dimensions 200 x 200
 

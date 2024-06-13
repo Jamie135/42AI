@@ -8,12 +8,15 @@ class ImageProcessor:
     def load(self, path):
         try:
             if not os.path.exists(path):
-                raise FileNotFoundError(f"FileNotFoundError: No such file or directory")
+                raise FileNotFoundError(f"Exception: FileNotFoundError -- strerror: No such file or directory")
             
             # context manager to help close file in case of error
             with Image.open(path) as img:
-                # use array() to convert the img object into array of float32
+                # use array() to convert the img object into an array of float32
+                # use / 255.0 to convert rgb value to normalized value (between 0 and 1)
                 img_array = np.array(img).astype(np.float32) / 255.0
+                # np.set_printoptions(precision=5, threshold=np.inf, suppress=True)
+                print(img_array)
                 print(f"Loading image of dimensions {img_array.shape[0]} x {img_array.shape[1]}")
                 return img_array
 
@@ -21,7 +24,7 @@ class ImageProcessor:
             print(fnferr)
             return None
         except OSError as oserr:
-            print(f"OSError: {oserr}")
+            print(f"Exception: OSError -- strerror: None")
             return None
     
 
@@ -37,12 +40,11 @@ class ImageProcessor:
         plt.show()
 
 
-# # Example usage:
-# imp = ImageProcessor()
-# arr = imp.load("non_existing_file.png")
-# print(arr)
-# arr = imp.load("empty_file.png")
-# print(arr)
-# arr = imp.load("42AI.png")
-# print(arr)
-# imp.display(arr)
+# Example usage:
+imp = ImageProcessor()
+arr = imp.load("../resources/non_existing_file.png")
+print(arr)
+arr = imp.load("../resources/empty_file.png")
+print(arr)
+arr = imp.load("../resources/42AI.png")
+imp.display(arr)
