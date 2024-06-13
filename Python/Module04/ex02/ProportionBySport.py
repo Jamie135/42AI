@@ -19,9 +19,11 @@ def proportion_by_sport(df, year, sport, gender):
         
         # filter the DataFrame for the given year and gender
         df_year_gender = df[(df['Year'] == year) & (df['Sex'] == gender)]
+        # print(df_year_gender)
         
         # drop duplicates to count only unique athletes
         df_id_unique = df_year_gender.drop_duplicates(subset='ID')
+        # print(df_id_unique)
         
         # get the total distinct athlete with shape[0] that represent the row i.e. the number of distinct id
         total_ath = df_id_unique.shape[0]

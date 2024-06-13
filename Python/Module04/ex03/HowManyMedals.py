@@ -14,6 +14,7 @@ def how_many_medals(df, name):
         # filter the DataFrame for the given name and non null medals
         # notna() referes to values that are not null
         df_name = df[(df['Name'] == name) & (df['Medal'].notna())]
+        # print(df_name)
 
         medals_year = {}
 

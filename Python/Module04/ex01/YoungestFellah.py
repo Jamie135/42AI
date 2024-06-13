@@ -11,17 +11,19 @@ def youngest_fellah(df, year):
             print("The Olympic year should be an integer.")
             return
         
-        # Filter the DataFrame for the given year
-        # Syntax: df_year is equal to SELECT 'Year' WHERE the value is equal year
+        # filter the DataFrame for the given year
+        # syntax: df_year is equal to SELECT 'Year' WHERE the value is equal year
         df_year = df[df['Year'] == year]
+        # print(df_year)
         
-        # Find the youngest age for females
+        # find the youngest age for females
         youngest_female = df_year[df_year['Sex'] == 'F']['Age'].min()
+        # print(youngest_female)
         
-        # Find the youngest age for males
+        # find the youngest age for males
         youngest_male = df_year[df_year['Sex'] == 'M']['Age'].min()
+        # print(youngest_male)
 
-        # Return the result as a dictionary
         return {'f': youngest_female, 'm': youngest_male}
     
     except Exception as e:
