@@ -22,31 +22,46 @@ def how_many_medals_by_country(df, team):
         # print(df_team)
 
         medals_year = {}
+        stop = False # for print test, unnecessary for the solution
 
-        # iterrows() iterate over DataFrame rows as a pair (index, row)
+        # iterrows() returns an iterator that yields index and row data for each row in df_team
         for _, row in df_team.iterrows():
             year = row['Year']
-            medal = row['Medal'][0]
+            medal = row['Medal'][0] # extract the first letter of the medal
 
-            # if team sport, count one medal per team per event
             if row['Sport'] in team_sports:
                 # unique key to avoid counting the same event
                 event_key = (row['Year'], row['Event'])
-                print(event_key)
+                # if not stop:
+                #     print(event_key)
+                #     stop = True
+                
                 if event_key in medals_year:
-                    if row['Medal'][0] in medals_year[event_key]:
+                    # check if the specific medal type is already counted, if not we add to the set
+                    if medal in medals_year[event_key]:
                         continue
                     else:
-                        medals_year[event_key].add(row['Medal'][0])
+                        medals_year[event_key].add(medal)
                 else:
-                    medals_year[event_key] = {row['Medal'][0]}
+                    medals_year[event_key] = {medal}
+                # if not stop:
+                #     print(medals_year[event_key])
+                #     stop = True
             else:
+                # initialize a new dictionary for that year
                 if year not in medals_year:
                     medals_year[year] = {'G': 0, 'S': 0, 'B': 0}
                 medals_year[year][medal] += 1
+        # print(medals_year)
         
+        # convert medals_year to a dictionary where the keys are only years 
+        # and the value are the medals count
         result = {}
+        # reminder: item() concatenate each pair of values in a dictionary into a list of tuple
+        # key can be the year for solo sport or a tuple of year and event for team sport
+        # medals is a dictionary of medals 
         for key, medals in medals_year.items():
+            # if key is a tuple, we just want its first index that represents the year
             if isinstance(key, tuple):
                 year = key[0]
                 if year not in result:
@@ -63,4 +78,4 @@ def how_many_medals_by_country(df, team):
 
 # Example usage
 df = pd.read_csv('../data/athlete_events.csv')
-print(how_many_medals_by_country(df, 'United States'))
+print(how_many_medals_by_country(df, 'Thailand'))
