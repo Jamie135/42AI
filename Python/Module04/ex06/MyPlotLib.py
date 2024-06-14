@@ -52,6 +52,7 @@ if __name__ == "__main__":
     mpl = MyPlotLib()
     features = ['Height', 'Weight']
 
+    # recommend to not display all at once
     mpl.histogram(data, features)
     mpl.density(data, features)
     mpl.pair_plot(data, features)
