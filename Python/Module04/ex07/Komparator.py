@@ -14,6 +14,7 @@ class Komparator:
         categories = self.df[categorical_var].unique()
         num_categories = len(categories)
         # subplots() creates a figure with a row of subplots assigned to axes
+        # sharey=True specifies that all graph use the same y axis
         fig, axes = plt.subplots(1, num_categories, figsize=(5 * num_categories, 6), sharey=True)
         # print(axes)
 
