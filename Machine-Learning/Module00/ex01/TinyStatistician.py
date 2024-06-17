@@ -44,17 +44,41 @@ class TinyStatistician:
         except:
             return None
         
-    
+
+    @staticmethod
+    def percentile(x, p):
+        if not isinstance(x, (list, np.ndarray)) or len(x) == 0:
+            return None
+        if not isinstance(p, (int, float)) or not (0 <= p <= 100):
+            return None
+        try:
+            sorted_x = sorted(x)
+            # k is the index in the sorted list where the p-th percentile value lies
+            k = (len(sorted_x) - 1) * (p / 100)
+            # round k to the nearest greater and smaller interger
+            f = int(np.floor(k))
+            c = int(np.ceil(k))
+            # if k is an integer then f = c and the percentile lies exactly at that index
+            if f == c:
+                return float(sorted_x[int(k)])
+            
+            # linear interpolation
+            # d0 is the contribution from the lower index f, weighted by how close k is to c
+            d0 = sorted_x[f] * (c - k)
+            # d1 is the contribution from the upper index c, weighted by how close k is to f
+            d1 = sorted_x[c] * (k - f)
+            return float(d0 + d1)
+        except:
+            return None
+
+
     @staticmethod
     def var(x):
         if not isinstance(x, (list, np.ndarray)) or len(x) == 0:
             return None
         try:
             mean = TinyStatistician.mean(x)
-            variance = 0
-            for value in x:
-                variance += (value - mean) ** 2
-            return variance / len(x)
+            return sum((value - mean) ** 2 for value in x) / (len(x) - 1)
         except:
             return None
 
@@ -80,7 +104,11 @@ print(stat.median(x))
 # Expected result: 42.0
 
 print(stat.quartiles(x))
-# Expected result: [10, 59]
+# Expected result: [5.5, 179.5]
+
+print(stat.percentile(x, 10))  # Expected: 4.6
+print(stat.percentile(x, 15))  # Expected: 6.4
+print(stat.percentile(x, 20))  # Expected: 8.2
 
 print(stat.var(x))
 # Expected result: 12279.439999999999
