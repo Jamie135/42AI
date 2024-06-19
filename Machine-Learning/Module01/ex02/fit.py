@@ -51,7 +51,6 @@ def fit_(x, y, theta, alpha, max_iter):
     """
     if x.ndim != 2 or y.ndim != 2 or theta.ndim != 2 or x.shape[1] != 1 or y.shape[1] != 1 or theta.shape != (2, 1):
         return None
-    m = len(y)
     for _ in range(max_iter):
         gradient = simple_gradient(x, y, theta)
         theta = theta - alpha * gradient

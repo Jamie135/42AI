@@ -63,7 +63,6 @@ class MyLinearRegression():
         """
         if x.ndim != 2 or y.ndim != 2 or self.thetas.ndim != 2 or x.shape[1] != 1 or y.shape[1] != 1 or self.thetas.shape != (2, 1):
             return None
-        m = len(y)
         for _ in range(self.max_iter):
             gradient = self.simple_gradient(x, y, self.thetas)
             self.thetas = self.thetas - self.alpha * gradient
