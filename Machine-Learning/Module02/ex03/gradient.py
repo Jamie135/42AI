@@ -16,22 +16,23 @@ def gradient(x, y, theta):
     Raises:
     This function should not raise any Exception.
     """
-    if not isinstance(x, np.ndarray) or not isinstance(y, np.ndarray) or not isinstance(theta, np.ndarray):
-        return None
-    if x.size == 0 or y.size == 0 or theta.size == 0:
-        return None
+    for array in [x, y]:
+        if not isinstance(array, np.ndarray):
+            return None
     m, n = x.shape
-    if y.shape != (m, 1) or theta.shape != (n + 1, 1):
+    if m == 0 or n == 0:
         return None
-    
+    elif y.shape != (m, 1):
+        return None
+    elif theta.shape != (n + 1, 1):
+        return None
     # add a column of ones to x to create a matrix X0
-    X0 = np.hstack((np.ones((m, 1)), x))
-    # with X0 as a matrix, we can now use vectorization instead of for loop
-    # to calculate the error array and use error to calculate the gradient array
-    error = np.dot(X0, theta) - y
+    X_prime = np.c_[np.ones(m), x]
+    # with Xprime as a matrix, we can now use vectorization instead of for loop
+    # to calculate the error array (theta - y)
+    # we can use @ instead of dot()
     # .T is a method to transpose a matrix
-    gradient = np.dot(X0.T, error) / m
-    return gradient
+    return (X_prime.T @ (X_prime @ theta - y)) / m
 
 
 if __name__ == "__main__":

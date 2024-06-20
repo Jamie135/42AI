@@ -17,21 +17,17 @@ def predict_(x, theta):
     Raises:
     This function should not raise any Exception.
     """
-    
-    if not isinstance(x, np.ndarray) or not isinstance(theta, np.ndarray):
+    if not isinstance(x, np.ndarray):
         return None
-    if x.size == 0 or theta.size == 0:
+    elif x.size == 0:
         return None
-    if theta.shape[0] != x.shape[1] + 1:
+    m = x.shape[0]
+    n = x.shape[1]
+    if theta.shape != (n + 1, 1):
         return None
-    
     # Add a column of ones to x to account for theta0
-    X0 = np.hstack((np.ones((x.shape[0], 1)), x))
-    
-    # Compute the prediction
-    y_hat = X0.dot(theta)
-    
-    return y_hat
+    X_prime = np.c_[np.ones(m), x]
+    return X_prime @ theta
 
 
 # Examples

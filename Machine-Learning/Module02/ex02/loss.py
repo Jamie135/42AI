@@ -19,9 +19,9 @@ def loss_(y, y_hat):
         return None
     if y.ndim != y_hat.ndim or y.size != y_hat.size:
         return None
-    
-    J = ((y_hat - y) ** 2) / (2 * y_hat.ndim)
-    return np.mean(J)
+
+    J_elem = (y_hat - y) ** 2
+    return np.mean(J_elem) / 2
 
 
 X = np.array([0, 15, -9, 7, 12, 3, -21])

@@ -16,22 +16,18 @@ def gradient(x, y, theta):
     Raises:
     This function should not raise any Exception.
     """
-    if not isinstance(x, np.ndarray) or not isinstance(y, np.ndarray) or not isinstance(theta, np.ndarray):
-        return None
-    if x.size == 0 or y.size == 0 or theta.size == 0:
-        return None
+    for array in [x, y]:
+        if not isinstance(array, np.ndarray):
+            return None
     m, n = x.shape
-    if y.shape != (m, 1) or theta.shape != (n + 1, 1):
+    if m == 0 or n == 0:
         return None
-    
-    # add a column of ones to x to create a matrix X0
-    X0 = np.hstack((np.ones((m, 1)), x))
-    # with X0 as a matrix, we can now use vectorization instead of for loop
-    # to calculate the error array and use error to calculate the gradient array
-    error = np.dot(X0, theta) - y
-    # .T is a method to transpose a matrix
-    gradient = np.dot(X0.T, error) / m
-    return gradient
+    elif y.shape != (m, 1):
+        return None
+    elif theta.shape != (n + 1, 1):
+        return None
+    X_prime = np.c_[np.ones(m), x]
+    return (X_prime.T @ (X_prime @ theta - y)) / m
 
 
 def fit_(x, y, theta, alpha, max_iter):
@@ -54,16 +50,23 @@ def fit_(x, y, theta, alpha, max_iter):
     Raises:
     This function should not raise any Exception.
     """
+    for arr in [x, y]:
+        if not isinstance(arr, np.ndarray):
+            return None
     m, n = x.shape
-    if not isinstance(x, np.ndarray) or not isinstance(y, np.ndarray) or not isinstance(theta, np.ndarray):
+    if m == 0 or n == 0:
         return None
-    if x.size == 0 or y.size == 0 or theta.size == 0:
+    if y.shape != (m, 1):
         return None
-    if y.shape != (m, 1) or theta.shape != (n + 1, 1):
+    elif theta.shape != ((n + 1), 1):
         return None
     for _ in range(max_iter):
         grad = gradient(x, y, theta)
-        theta = theta - alpha * grad
+        if grad is None:
+            return None
+        if all(__ == 0. for __ in grad):
+            break
+        theta -= alpha * grad
     return theta
 
 

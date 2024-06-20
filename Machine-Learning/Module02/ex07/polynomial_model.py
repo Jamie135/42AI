@@ -14,11 +14,15 @@ def add_polynomial_features(x, power):
     This function should not raise any Exception.
     """
     if not isinstance(x, np.ndarray) or not isinstance(power, int):
+            return None
+    elif x.size == 0 or power < 0:
         return None
-    if x.size == 0 or x.shape[1] != 1:
-        return None
-    
-    return np.hstack([x ** i for i in range(1, power + 1)])
+    if power == 0:
+        return np.ones((x.size, 1))
+    res = np.ones((x.size, power))
+    for i in range(power):
+        res[:, i] = x.ravel() ** (i + 1)
+    return res
     # m = x.shape[0]
     # vandermonde = np.zeros((m, power))
     # for i in range (1, power + 1):
