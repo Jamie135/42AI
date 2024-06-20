@@ -11,7 +11,7 @@ class MyLinearRegression():
     My personnal linear regression class to fit like a boss.
     """
 
-    def __init__(self, thetas, alpha=0.0001, max_iter=500_000):
+    def __init__(self, thetas, alpha=0.0001, max_iter=300000):
         if not isinstance(alpha, float) or alpha < 0.0:
             return None
         elif not isinstance(max_iter, int) or max_iter < 0:
@@ -221,6 +221,7 @@ class MyLinearRegression():
             print(f"ETA: {eta:.2f}s [{int(progress * 100)}%]{progress_bar} {i}/{total} | elapsed time {elapsed_time:.2f}s", end='\r')
         print()
 
+
     def add_polynomial_features(self, x, power):
         if not isinstance(x, np.ndarray) or not isinstance(power, int):
             return None
@@ -235,110 +236,79 @@ class MyLinearRegression():
 
 
 if __name__ == "__main__":
-    linear_regression = MyLinearRegression([80, -10], 10e-10, 100_000)
-    try:
-        data = pd.read_csv("./are_blue_pills_magics.csv")
-    except FileExistsError:
-        print("File not found")
 
-    x = data['Micrograms'].values
-    y = data['Score'].values.reshape(-1, 1)
+    linear_regression = MyLinearRegression([[0.0], [1.0]])
+    data = pd.read_csv("./spacecraft_data.csv")
 
-    polynom = linear_regression.add_polynomial_features(x, 6)
+    # # UNIVARIATE
+    # print("\nUNIVARIATE\n")
+    # features = ["Age", "Thrust_power", "Terameters"]
+    # # select each feature and the sell price for that feature
+    # for feature in features:
+    #     # update theta to the appropriate value
+    #     linear_regression.thetas = np.array([[500.0], [1.0]])
+    #     x = np.array(data[feature]).reshape(-1, 1)
+    #     y = np.array(data["Sell_price"]).reshape(-1, 1)
 
-    theta1 = np.array([[89.04720427],
-                        [-8.99425854]]
-                        ).reshape(-1, 1)
+    #     # train the model
+    #     linear_regression.fit_(x, y)
 
-    theta2 = np.array([[69.77316037],
-                        [1.49660362],
-                        [-1.21861482]]).reshape(-1, 1)
+    #     # predict the feature
+    #     y_hat = linear_regression.predict_(x)
+    #     print(f"\n{feature}'s MSE: {linear_regression.mse_(y, y_hat)}")
 
-    theta3 = np.array([[89.0],
-                        [-8.4],
-                        [0.8],
-                        [-0.1]]).reshape(-1, 1)
+    #     # plotting
+    #     plt.scatter(x, y)
+    #     plt.scatter(x, y_hat, color="orange", marker=".")
+    #     plt.title(f"Price based on {feature}")
+    #     if feature == "Age":
+    #         plt.xlabel(f"{feature} (in years)")
+    #     elif feature == "Terameters":
+    #         plt.xlabel(f"{feature} (in Tmeters)")
+    #     else:
+    #         plt.xlabel(f"{feature} (in 10Km/s)")
+    #     plt.ylabel("Sell price (in keuros)")
+    #     plt.grid()
+    #     plt.legend(["Sell price", "Predicted sell price"])
+    #     plt.show()
+    
 
-    theta4 = np.array([[-20.0],
-                        [160.0],
-                        [-80.0],
-                        [10.0],
-                        [-1.0]]
-                        ).reshape(-1, 1)
+    # MULTIVARIATE
+    print("\nMULTIVARIATE\n")
+    features = ["Age", "Thrust_power", "Terameters"]
+    x = np.array(data[features])
+    y = np.array(data["Sell_price"]).reshape(-1, 1)
 
-    theta5 = np.array([[1140],
-                        [-1850],
-                        [1110],
-                        [-305],
-                        [40.0],
-                        [-2.0]]
-                        ).reshape(-1, 1)
+    linear_regression.thetas = np.array([[1.0], [1.0], [1.0], [1.0]])
+    y_hat = linear_regression.predict_(x)
+    print(f"\nInitial MSE: {linear_regression.mse_(y, y_hat)}")
 
-    theta6 = np.array([[9110],
-                        [-18015],
-                        [13400],
-                        [-4935],
-                        [966],
-                        [-96.4],
-                        [3.86]]
-                        ).reshape(-1, 1)
+    # update thetas with appropriate values
+    linear_regression.thetas = np.array([[367.28849513],
+                                         [-23.69939116],
+                                         [5.73622772],
+                                         [-2.63855314]])
+    linear_regression.alpha = 9e-5
+    linear_regression.max_iter = 500000
 
-    hypothesis_thetas = [theta1, theta2, theta3, theta4, theta5, theta6]
+    # train the model
+    linear_regression.fit_(x, y)
+    y_hat = linear_regression.predict_(x)
+    print(f"Theta: {linear_regression.thetas}")
 
-    thetas = []
-    mse_scores = []
-
-    # Trains six separate Linear Regression models with polynomial
-    # hypothesis with degrees ranging from 1 to 6
-    # Plots the 6 models and the data points on the same figure.
-    # Use lineplot style for the models and scaterplot for the data points.
-    # Add more prediction points to have smooth curves for the models.
-    fig, ax = plt.subplots(2, 3)
-
-    for i in range(1, 7):
-        print("Training model {} / 6\n".format(i))
-
-        linear_regression.thetas = hypothesis_thetas[i - 1]
-        current_x = polynom[:, :i]
-        linear_regression.fit_(current_x, y)
-        y_hat = linear_regression.predict_(current_x)
-
-        thetas.append(linear_regression.thetas)
-        mse_scores.append(linear_regression.mse_(y, y_hat))
-
-        # Plots the data points
-        ax[(i - 1) // 3][(i - 1) % 3].scatter(x, y, color='blue')
-
-        # Plots the model curve
-        min_x = np.min(x)
-        max_x = np.max(x)
-        continuous_x = np.linspace(min_x, max_x, 100)
-        predicted_x = linear_regression.add_polynomial_features(continuous_x,
-                                                                i)
-        predicted_y = linear_regression.predict_(predicted_x)
-        ax[(i - 1) // 3][(i - 1) % 3].plot(continuous_x, predicted_y, color='orange')
-        # Add title and axis names
-        ax[(i - 1) // 3][(i - 1) % 3].set_title("Degree {}, score : {}".format(i, mse_scores[i - 1]))
-        ax[(i - 1) // 3][(i - 1) % 3].set_xlabel("Micrograms")
-        ax[(i - 1) // 3][(i - 1) % 3].set_ylabel("Score")
-
-        # Compute Loss
-        loss = linear_regression.loss_(y, y_hat)
-        print()
-        print("Loss {} : {}".format(i, loss))
-        print("Thetas : {}".format(linear_regression.thetas))
-        print()
-
-    plt.show()
-
-    for i in range(6):
-        print("Model {} :".format(i + 1))
-        print("Thetas : {}".format(thetas[i]))
-        print("MSE : {}\n".format(mse_scores[i]))
-
-    # Plots a bar plot showing the MSE score of the models in function of
-    # the polynomial degree of the hypothesis,
-    plt.bar([1, 2, 3, 4, 5, 6], mse_scores)
-    plt.xlabel("Polynomial degree")
-    plt.ylabel("MSE")
-    plt.show()
+    # plotting
+    for feature in features:
+        plt.scatter(x[:, features.index(feature)], y)
+        plt.scatter(x[:, features.index(feature)], y_hat, color="orange", marker=".")
+        plt.title(f"Price based on {feature}")
+        if feature == "Age":
+            plt.xlabel(f"{feature} (in years)")
+        elif feature == "Terameters":
+            plt.xlabel(f"{feature} (in Tmeters)")
+        else:
+            plt.xlabel(f"{feature} (in 10Km/s)")
+        plt.ylabel("Sell price (in Keuros)")
+        plt.grid()
+        plt.legend(["Sell price", "Predicted sell price"])
+        plt.show()
+    print(f"\nMSE: {linear_regression.mse_(y, y_hat)}")
