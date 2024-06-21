@@ -222,19 +222,6 @@ class MyLinearRegression():
         print()
 
 
-    def add_polynomial_features(self, x, power):
-        if not isinstance(x, np.ndarray) or not isinstance(power, int):
-            return None
-        elif x.size == 0 or power < 0:
-            return None
-        if power == 0:
-            return np.ones((x.size, 1))
-        res = np.ones((x.size, power))
-        for i in range(power):
-            res[:, i] = x.ravel() ** (i + 1)
-        return res
-
-
 X = np.array([[1., 1., 2., 3.], [5., 8., 13., 21.], [34., 55., 89., 144.]])
 Y = np.array([[23.], [48.], [218.]])
 mylr = MyLinearRegression([[1.], [1.], [1.], [1.], [1]])
