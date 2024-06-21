@@ -14,22 +14,23 @@ def add_polynomial_features(x, power):
     This function should not raise any Exception.
     """
     if not isinstance(x, np.ndarray) or not isinstance(power, int):
-            return None
+        return None
     elif x.size == 0 or power < 0:
         return None
     if power == 0:
-        return np.ones((x.size, 1))
-    res = np.ones((x.size, power))
-    for i in range(power):
-        res[:, i] = x.ravel() ** (i + 1)
+        return np.ones((x.shape[0], 1))
+    
+    # np.atleast_2d, will treat x as at least a 2-dimensional array and
+    # if x is a row vector (1xN), it will be transposed to a column vector (Nx1)
+    x = np.atleast_2d(x)
+    if x.shape[0] == 1:
+        x = x.T
+    
+    res = np.ones((x.shape[0], power))
+    for i in range(1, power + 1):
+        res[:, i - 1] = x[:, 0] ** i
+    
     return res
-    # m = x.shape[0]
-    # vandermonde = np.zeros((m, power))
-    # for i in range (1, power + 1):
-    #     # assign all value of each row from x, power by i, 
-    #     # to the i-1 column of all rows in vandermonde
-    #     vandermonde[:, i - 1] = x[:, 0] ** i
-    # return vandermonde
 
 
 x = np.arange(1,6).reshape(-1, 1)
